@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>우리 가족 이야기</title>
+  <meta name="description" content="우리 가족을 소개합니다." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fdf8f3;
+      --surface: #ffffff;
+      --text: #3a2f28;
+      --muted: #8a7a6e;
+      --accent: #e07a5f;
+      --accent-soft: #f6ddd4;
+      --line: #eee3d9;
+      --shadow: 0 8px 24px rgba(90, 60, 40, 0.08);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #1f1a17;
+        --surface: #2a2420;
+        --text: #f1e8e0;
+        --muted: #b3a497;
+        --accent: #f2a285;
+        --accent-soft: #4a352d;
+        --line: #3a322c;
+        --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #1f1a17;
+      --surface: #2a2420;
+      --text: #f1e8e0;
+      --muted: #b3a497;
+      --accent: #f2a285;
+      --accent-soft: #4a352d;
+      --line: #3a322c;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Noto Sans KR", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    h1, h2, h3 { font-family: "Gowun Dodum", "Noto Sans KR", sans-serif; font-weight: 400; }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+
+    /* 내비게이션 */
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+    nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+    nav .logo { font-family: "Gowun Dodum", sans-serif; font-size: 1.15rem; color: var(--text); text-decoration: none; }
+    nav ul { display: flex; gap: 20px; list-style: none; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.95rem; }
+    nav a:hover { color: var(--accent); }
+    @media (max-width: 560px) { nav ul { display: none; } }
+
+    /* 히어로 */
+    .hero { text-align: center; padding: 88px 0 72px; }
+    .hero .emoji { font-size: 3.5rem; }
+    .hero h1 { font-size: clamp(2rem, 6vw, 3.2rem); margin: 12px 0; }
+    .hero p { color: var(--muted); font-size: 1.1rem; }
+    .hero .since {
+      display: inline-block; margin-top: 20px; padding: 6px 16px;
+      border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 500;
+    }
+
+    section { padding: 64px 0; }
+    .section-title { text-align: center; margin-bottom: 40px; }
+    .section-title h2 { font-size: 2rem; }
+    .section-title p { color: var(--muted); }
+
+    /* 가족 구성원 */
+    .members { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+      padding: 28px 22px; text-align: center; box-shadow: var(--shadow);
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-4px); }
+    .avatar {
+      width: 96px; height: 96px; margin: 0 auto 16px; border-radius: 50%;
+      display: grid; place-items: center; font-size: 2.8rem;
+      background: var(--accent-soft); overflow: hidden;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .card h3 { font-size: 1.4rem; }
+    .card .role { color: var(--accent); font-weight: 500; font-size: 0.9rem; }
+    .card .desc { color: var(--muted); font-size: 0.95rem; margin-top: 10px; }
+    .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 14px; }
+    .tags span { font-size: 0.8rem; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+
+    /* 가훈 */
+    .motto {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 24px;
+      padding: 48px 24px; text-align: center; box-shadow: var(--shadow);
+    }
+    .motto blockquote { font-family: "Gowun Dodum", sans-serif; font-size: clamp(1.4rem, 4vw, 2rem); }
+    .motto cite { display: block; margin-top: 12px; color: var(--muted); font-style: normal; }
+
+    /* 연대기 */
+    .timeline { position: relative; max-width: 640px; margin: 0 auto; padding-left: 28px; }
+    .timeline::before { content: ""; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--line); }
+    .event { position: relative; margin-bottom: 28px; }
+    .event::before {
+      content: ""; position: absolute; left: -27px; top: 7px; width: 14px; height: 14px;
+      border-radius: 50%; background: var(--accent); border: 3px solid var(--bg);
+    }
+    .event .year { color: var(--accent); font-weight: 700; }
+    .event p { color: var(--muted); }
+
+    /* 갤러리 */
+    .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+    .photo {
+      aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; position: relative;
+      display: grid; place-items: center; font-size: 2.5rem; background: var(--accent-soft);
+    }
+    .photo img { width: 100%; height: 100%; object-fit: cover; }
+    .photo figcaption {
+      position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 12px;
+      font-size: 0.85rem; color: #fff; background: linear-gradient(transparent, rgba(0,0,0,0.55));
+    }
+
+    footer { text-align: center; padding: 40px 0 56px; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="wrap">
+      <a class="logo" href="#top">🏡 우리 가족</a>
+      <ul>
+        <li><a href="#members">구성원</a></li>
+        <li><a href="#motto">가훈</a></li>
+        <li><a href="#story">이야기</a></li>
+        <li><a href="#gallery">추억</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="wrap">
+      <div class="emoji">👨‍👩‍👧‍👦</div>
+      <h1 id="family-name"></h1>
+      <p id="family-intro"></p>
+      <span class="since" id="family-since"></span>
+    </div>
+  </header>
+
+  <section id="members">
+    <div class="wrap">
+      <div class="section-title"><h2>가족을 소개합니다</h2><p>함께라서 더 행복한 사람들</p></div>
+      <div class="members" id="member-list"></div>
+    </div>
+  </section>
+
+  <section id="motto">
+    <div class="wrap">
+      <div class="motto">
+        <blockquote id="motto-text"></blockquote>
+        <cite>— 우리 집 가훈</cite>
+      </div>
+    </div>
+  </section>
+
+  <section id="story">
+    <div class="wrap">
+      <div class="section-title"><h2>우리의 이야기</h2><p>소중한 순간들</p></div>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </section>
+
+  <section id="gallery">
+    <div class="wrap">
+      <div class="section-title"><h2>추억 앨범</h2><p>함께 만든 기억들</p></div>
+      <div class="gallery" id="photo-list"></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© <span id="year"></span> <span id="footer-name"></span> · 사랑으로 만들었어요 ❤️</p>
+  </footer>
+
+  <script>
+    // =========================================================
+    //  ✏️ 여기만 고치면 됩니다! 가족 정보를 아래에 입력하세요.
+    //  사진을 쓰려면 photo: "images/dad.jpg" 처럼 경로를 넣으세요.
+    //  (비워두면 이모지가 대신 표시됩니다)
+    // =========================================================
+    const family = {
+      name: "한씨네 가족",
+      intro: "한준욱 · 현경숙 · 한지율 · 한채원, 네 식구의 홈페이지에 오신 것을 환영합니다!",
+      since: "Since 2009.01.19",
+      motto: "항상 최선을 다하자",
+
+      members: [
+        { name: "한준욱", role: "아빠", emoji: "👨", photo: "", desc: "", tags: [] },
+        { name: "현경숙", role: "엄마", emoji: "👩", photo: "", desc: "", tags: [] },
+        { name: "한지율", role: "첫째 · 아들", emoji: "👦", photo: "", desc: "", tags: [] },
+        { name: "한채원", role: "둘째 · 딸", emoji: "👧", photo: "", desc: "", tags: [] },
+      ],
+
+      timeline: [
+        { year: "2009.01.19", title: "아빠 엄마의 결혼", desc: "우리 가족의 이야기가 시작되었어요." },
+        { year: "2026", title: "가족 홈페이지 오픈", desc: "우리 이야기를 기록하기 시작했어요." },
+      ],
+
+      // 사진을 추가하면 '추억 앨범' 섹션이 나타나요. 예: { emoji: "🏖️", src: "images/sea.jpg", caption: "바다 여행" }
+      photos: [],
+    };
+
+    // ---------- 아래는 화면을 그리는 코드 (수정할 필요 없음) ----------
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    $("family-name").textContent = family.name;
+    $("family-intro").textContent = family.intro;
+    $("family-since").textContent = family.since;
+    $("motto-text").textContent = `“${family.motto}”`;
+    $("footer-name").textContent = family.name;
+    $("year").textContent = new Date().getFullYear();
+    document.title = family.name;
+
+    $("member-list").innerHTML = family.members.map((m) => `
+      <article class="card">
+        <div class="avatar">${m.photo ? `<img src="${esc(m.photo)}" alt="${esc(m.name)}">` : esc(m.emoji)}</div>
+        <h3>${esc(m.name)}</h3>
+        <div class="role">${esc(m.role)}</div>
+        ${m.desc ? `<p class="desc">${esc(m.desc)}</p>` : ""}
+        ${m.tags.length ? `<div class="tags">${m.tags.map((t) => `<span>#${esc(t)}</span>`).join("")}</div>` : ""}
+      </article>`).join("");
+
+    $("timeline").innerHTML = family.timeline.map((e) => `
+      <div class="event">
+        <div class="year">${esc(e.year)}</div>
+        <h3>${esc(e.title)}</h3>
+        <p>${esc(e.desc)}</p>
+      </div>`).join("");
+
+    $("photo-list").innerHTML = family.photos.map((p) => `
+      <figure class="photo">
+        ${p.src ? `<img src="${esc(p.src)}" alt="${esc(p.caption)}">` : esc(p.emoji)}
+        <figcaption>${esc(p.caption)}</figcaption>
+      </figure>`).join("");
+
+    // 사진이 없으면 앨범 섹션과 메뉴 숨기기
+    if (!family.photos.length) {
+      $("gallery").hidden = true;
+      document.querySelector('nav a[href="#gallery"]').parentElement.hidden = true;
+    }
+  </script>
+</body>
+</html>
